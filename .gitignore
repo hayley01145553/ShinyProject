@@ -1,0 +1,4 @@
+*.csv
+.git
+.git/*
+csv_data/*
