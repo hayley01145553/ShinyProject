@@ -1,0 +1,13 @@
+name: shinyProject
+title: shinyProject
+username:
+account: hayley01145553
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 1067602
+bundleId: 2290455
+url: https://hayley01145553.shinyapps.io/shinyProject/
+when: 1564977681.45195
+asMultiple: FALSE
+asStatic: FALSE
+ignoredFiles: csv_data/homicide-database_raw.csv

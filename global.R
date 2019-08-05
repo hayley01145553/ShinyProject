@@ -12,6 +12,18 @@ library(tidyverse)
 
 #### tab1: WHERE? data #### 
 # state , crime.sovled, count 
+
+# create dataframe crime type = both
+create_crimetype_both <- function(df){
+  tmp_df <- df %>% 
+    mutate(state = as.character(state)) %>% 
+    group_by(state) %>% 
+    summarise(count = n()) %>% 
+    mutate(crime.solved = 'both')
+  tmp_df <- tmp_df[c(1,3,2)]
+  return(tmp_df)
+}
+
 df_state_homicide <- df_homicide %>% 
   mutate(state = as.character(state), crime.solved = as.character(crime.solved)) %>% 
   group_by(state,crime.solved) %>%
@@ -35,16 +47,7 @@ sort_crime_solved_value = sort(unique(df_state_homicide$crime.solved))
 choice_crime_solved <-  c(sort_crime_solved_value[1],sort_crime_solved_value[3],sort_crime_solved_value[2],'ratio(yes)')
 
 
-# create dataframe crime type = both
-create_crimetype_both <- function(df){
-  tmp_df <- df %>% 
-    mutate(state = as.character(state)) %>% 
-    group_by(state) %>% 
-    summarise(count = n()) %>% 
-    mutate(crime.solved = 'both')
-  tmp_df <- tmp_df[c(1,3,2)]
-  return(tmp_df)
-}
+
 
 #### tab2: WHEN data #### 
 # sorted count group by state
@@ -52,31 +55,6 @@ df_state_sorted_by_count <- df_state_homicide %>%
   filter(crime.solved == 'both') %>% 
   arrange(desc(count)) 
 
-# delete from ########################################################
-# top 5 state 
-df_year_state_top5_homicide  <-  df_homicide %>% 
-  group_by(year,state) %>% 
-  summarise(count = n()) %>% 
-#  filter(state %in% df_state_sorted_by_count$state[1:6] & state != "Florida" )
-  filter(state %in% df_state_sorted_by_count$state[1:5] ) 
-
-  year<- unique(df_year_homicide$year)
-
-  
-  # for(i in 1: length(year)){
-  #   if(year[i] == df_year_state_top5_homicide$year){
-  #      tmp_df 
-  #   }
-  #    
-  # }
-  # top1 <-   
-    
-# bottom 5 state 
-df_year_state_bottom5_homicide  <-  df_homicide %>% 
-  group_by(year,state) %>% 
-  summarise(count = n()) %>%  
-  filter(state %in% df_state_sorted_by_count$state[(nrow(df_state_sorted_by_count)-4):nrow(df_state_sorted_by_count)]) 
-##### delete to #######################################################################
 
 ##  create graph data ##
 # each year  
@@ -224,29 +202,35 @@ df_weapon_year_all_graph <- df_weapon_perpetrator_gender_year_gunGroup_all %>%
 
 #### tab5: who killed who? data #### 
 
-#choice value 
-
-choice_rel_category = c("All",c(distinct(df_rel_category_groupby,relationship.category)))
-
 df_rel_category <-
-df_homicide %>% 
+  df_homicide %>% 
   mutate(relationship = as.character(relationship)) %>% 
   mutate(relationship.category = 
            if_else(relationship %in% c('Acquaintance','Neighbor'),'Acquaintance',
                    if_else(grepl("(friend)",tolower(relationship)),'Friend',
                            if_else(grepl("(wife|husband)",tolower(relationship)),'Husband/Wife',
-                           if_else(grepl("(Stranger|Unknown)",relationship),relationship,
-                           if_else(grepl("^(Employe)",relationship),"Work","Family")))))) 
+                                   if_else(grepl("(Stranger|Unknown)",relationship),relationship,
+                                           if_else(grepl("^(Employe)",relationship),"Work","Family")))))) 
+
+
 
 df_rel_category_groupby <- df_rel_category %>% 
- group_by(relationship.category) %>% 
+  group_by(relationship.category) %>% 
   summarise(count = n()) %>% 
   arrange(desc(count))
+
+
+
 
 df_rel_groupby <- df_rel_category %>% 
   group_by(relationship) %>% 
   summarise(count = n()) %>% 
   arrange(desc(count)) 
+#choice value 
+choice_rel_category = c("All",c(distinct(df_rel_category_groupby,relationship.category)))
+
+
+
 
 # add detail : #1 Wife/Husband  
 # df_rel_detail <- 

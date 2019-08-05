@@ -45,20 +45,22 @@ shinyServer(
             if(!selected_crime_solved() %in% c('Yes','No','both')){    
                 df_state_homicide_tmp <- df_state_ratio_homicide
                 colorvar = "ratio"
-                colors = "['#FFFFFF','#1857D5']"
+                colors = "['#FFFFFF', '#99FFFF','#1857D5']"
             }else{
                 df_state_homicide_tmp <- df_state_homicide[df_state_homicide$crime.solved == selected_crime_solved(), ]
                 colorvar = "count"
                 colors =  "['#EEE4E4','#F29D9D','#9E0A0A']"
                 
+            
             }
             gvisGeoChart(data = df_state_homicide_tmp, locationvar = "state",  colorvar = colorvar,
                                             options=list(region="US", displayMode="regions",
-                                       resolution="provinces", title="Tallest Building Count by Country"
+                                       resolution="provinces"
                                        #, colors="['#cbb69d', '#603913', '#c69c6e']"
                                        #, colors= "[\'white\',\'pink\',\'red']"
                                        , colors= colors
-                                       # ,width="600", height="400"
+                                       #, title = "Murders by state"
+                                       # ,width="600"
                                        )
              )
          })
@@ -76,17 +78,18 @@ shinyServer(
        
         output$line_peryear = renderGvis({
             gvisLineChart(data = df_year_all, xvar="year", yvar="count"
-                         , options=list( title = 'Number of homicide in USA per year ',
+                         , options=list( title = 'Number of murders per year ',
                                          chartArea= "{width: '70%'}",
                                          hAxis = "{
                                              title: 'Year',
                                                format: '####',
                                           }",
                                          vAxis  = "{
-                                              title: 'Number of incident',
+                                              title: 'Number of murders',
                                               minValue: 0
                                           }",
-                                         pointSize= 5
+                                         pointSize= 5,
+                                         height=300
                                          #                series="[{color:'green', targetAxisIndex: 0, 
                                          # lineWidth: 1, lineDashStyle: [2, 2, 20, 2, 20, 2]}, 
                                          # {color: 'blue',targetAxisIndex: 1, 
@@ -106,7 +109,7 @@ shinyServer(
             # }
             gvisColumnChart(data = df_year_crime_solved, xvar="year", yvar=c("solved","notSolved")
                          , options=list( isStacked=TRUE , 
-                                         title = 'Number of homicide in USA per year ',
+                                         title = 'Number of murders per year (solved/notsolved)',
                                          chartArea= "{width: '70%'}",
                                          colors="['#9575cd', '#33ac71']",
                                          hAxis= "{
@@ -114,7 +117,7 @@ shinyServer(
                                                format: '####'
                                           }",
                                          vAxis = "{
-                                              title: 'Number of incident',
+                                              title: 'Number of murders',
                                               minValue: 0
                                           }",
                                          bar="{groupWidth:'70%'}",
@@ -140,7 +143,7 @@ shinyServer(
             # }
             #gvisPieChart(data, labelvar = "", numvar = "", options = list(), chartid)
             gvisPieChart(data = df_victim_perpetrator_sex, labelvar="who", numvar="count"
-                         , options=list( title = 'Who killed by who (Gender)?'
+                         , options=list( title = 'Who killed by whom (Gender)?'
                                          #,is3D= TRUE
                                          ,width="600", height="300",
                                          pieHole= 0.3
@@ -162,14 +165,16 @@ shinyServer(
                 seriesVal = "[{color: 'green', lineWidth: 2, lineDashStyle: [2, 2, 20, 2, 20, 2]}, 
                                                   {color: 'purple',
                                                    lineWidth: 2, lineDashStyle: [4, 1]}]"
+                titleVal = 'Number of perpetrator by male,female,age '
             }else{ #victim
                 colnum = c("Male Victim","Female Victim")
                 seriesVal = "[{color: 'blue', lineWidth: 2, lineDashStyle: [2, 2, 20, 2, 20, 2]}, 
                                                   {color: 'red',
                                                    lineWidth: 2, lineDashStyle: [4, 1]}]"
+                titleVal =  'Number of victim by male,female,age'
             }
             gvisLineChart(data = df_victim_perpetrator_age_linegraph, xvar="age", yvar=colnum
-                          , options=list( title = 'Number of male, female by age ',
+                          , options=list( title = titleVal,
                                           chartArea= "{width: '70%'}",
                                           hAxis = "{
                                              title: 'Age',
@@ -309,7 +314,7 @@ shinyServer(
             # }
             #gvisPieChart(data, labelvar = "", numvar = "", options = list(), chartid)
             gvisPieChart(data = df_rel_category_tmp, labelvar=labelvarVal, numvar="count"
-                         , options=list( title = 'Who killed who (Relationship)?'
+                         , options=list( title = 'Who killed whom (Relationship)?'
                                          #is3D= TRUE,
                                          , height="400"
                                          # vAxes="[{title:'val1'}, {title:'val2'}]"
@@ -334,7 +339,7 @@ shinyServer(
             # }
             gvisColumnChart(data = df_rel_detail_tmp, xvar=xvarVal, yvar="count"
                             , options=list( #isStacked=TRUE , 
-                                            title = 'Number of incident by Relationship detail ',
+                                            title = 'Number of murders by Relationship detail ',
                                             chartArea= "{width: '70%'}",
                                             #colors="['#9575cd', '#33ac71']",
                                             
@@ -344,7 +349,7 @@ shinyServer(
                                                
                                           }",
                                             vAxis = "{
-                                              title: 'Number of incident',
+                                              title: 'Number of murders',
                                               minValue: 0
                                           }",
                                             bar="{groupWidth:'70%'}",
@@ -374,14 +379,14 @@ shinyServer(
             
             print(df_rel_detail_year_tmp)
             gvisLineChart(data = df_rel_detail_year_tmp, xvar="year", yvar=yvarVal
-                          , options=list( title = 'Number of incident by Relationship detail, Year ',
+                          , options=list( title = 'Number of murders by Relationship detail, Year ',
                                           chartArea= "{width: '70%'}",
                                           hAxis = "{
                                              title: 'Year',
                                                format: '####',
                                           }",
                                           vAxis  = "{
-                                              title: 'Number of incident',
+                                              title: 'Number of murders',
                                               minValue: 0
                                           }",
                                           pointSize= 1,

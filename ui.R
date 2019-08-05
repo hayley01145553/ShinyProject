@@ -34,15 +34,15 @@
 
 
 shinyUI(dashboardPage(
-    dashboardHeader(title = 'Dashboard'),
+    dashboardHeader(title = 'Murder Statistics'),
     dashboardSidebar(
-        sidebarUserPanel(name = 'homicide'),
+        sidebarUserPanel(name="Question"),
         sidebarMenu(
             menuItem(text = 'Where?',tabName = 'where', icon = icon('map')),
             menuItem(text = 'When?',tabName = 'when', icon = icon('database')),
             menuItem(text = 'Who?',tabName = 'who', icon = icon('database')),
-            menuItem(text = 'Using What?',tabName = 'what', icon = icon('database')),
-            menuItem(text = 'Who killed who?',tabName = 'whokilled', icon = icon('database'))
+            menuItem(text = 'What Used?',tabName = 'what', icon = icon('database')),
+            menuItem(text = 'Who killed whom?',tabName = 'whokilled', icon = icon('database'))
         )
        
     ),
@@ -60,7 +60,7 @@ shinyUI(dashboardPage(
                             selectizeInput(
                                 inputId = 'sel_crime_solved',label='Select Crime solved Item', choices = choice_crime_solved)
                             ), 
-                        box(status = "primary",width=8,
+                        box(status = "primary",width=5,title="Murders by state",
                             htmlOutput('map')
                             )
                     )
@@ -69,7 +69,7 @@ shinyUI(dashboardPage(
                     # fluidRow(box(DT::dataTableOutput('table'),
                     #              width=12))
                     fluidRow(
-                        box(status = "warning",width=11,
+                        box(status = "warning",width=8,
                             htmlOutput('line_peryear')
                             )
                         # box(status = "primary", width=3,
@@ -78,7 +78,7 @@ shinyUI(dashboardPage(
                         # ) 
                     ),
                     fluidRow(
-                        box(status = "warning",width=11,
+                        box(status = "warning",width=8,
                             htmlOutput('bar_peryear_crime_solved')
                         )
                     )
@@ -91,13 +91,13 @@ shinyUI(dashboardPage(
                     #                 format="###0",animate=TRUE)
                     # ),
                     fluidRow(
-                        box(status = "primary",width=12,
+                        box(status = "primary",width=6,
                             htmlOutput('pie_victim_perpetrator_sex')
                         )
                     ),
                     
                     fluidRow(
-                        box(status = "primary",width=3, title = "Inputs",
+                        box(status = "primary",width=2, title = "Inputs",
                         #     selectizeInput(
                         #         inputId = 'sel_perpetrator_gender',label='Please Select the Perpetrator Gender', choices = choice_gender)
                         # ) 
@@ -105,7 +105,7 @@ shinyUI(dashboardPage(
                                          choices = list("Perpetrator" = 1, "Victim" = 2), 
                                          selected = 1)
                         ),
-                        box(status = "primary",width=9,
+                        box(status = "primary",width=7,
                             htmlOutput('box_victim_perpetrator_sex_age2')
                         )
                     )
@@ -124,7 +124,7 @@ shinyUI(dashboardPage(
                     #                 format="###0",animate=TRUE)
                     # ),
                     fluidRow(
-                        box(status = "warning", width=5,title = "Inputs",
+                        box(status = "warning", width=3,title = "Inputs",
                              selectizeInput(
                                  inputId = 'sel_perpetrator_gender',label='Please Select the Perpetrator Gender', choices = choice_gender)
                          ) 
@@ -133,33 +133,35 @@ shinyUI(dashboardPage(
                         # )
                     ),
                     fluidRow(
-                        box(status = "warning",width=11,
+                        box(status = "warning",width=8,
                             htmlOutput('pie_weapon_2')
                         )
                     ),
                     fluidRow(
-                        box(status = "warning",width=11,
+                        box(status = "warning",width=8,
                             htmlOutput('area_weapon_year')
                         )
                     )
             ),
             tabItem(tabName = 'whokilled',
                     fluidRow(
-                        box(status = "primary", width=5,title = "Inputs",
+                        box(status = "primary", width=3,title = "Inputs",
                             selectizeInput(
                                 inputId = 'sel_rel_category',label='Please Select the Relationship Category', choices = choice_rel_category)
                         )
-                         , box(status = "primary",width=12,
+                    ),
+                    fluidRow(
+                          box(status = "primary",width=8,
                              htmlOutput('pie_rel_category')
                          )
                      ),
                     fluidRow(
-                         box(status = "primary",width=12,
+                         box(status = "primary",width=8,
                              htmlOutput('line_rel_detail')
                          )
                      ),
                     fluidRow(
-                        box(status = "primary",width=12,
+                        box(status = "primary",width=8,
                             htmlOutput('bar_rel_detail')
                         )
                     )
